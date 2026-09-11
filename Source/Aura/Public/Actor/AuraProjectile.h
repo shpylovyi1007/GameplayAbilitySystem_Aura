@@ -2,6 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "AuraProjectile.generated.h"
@@ -19,6 +20,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = "Aura|Projectile")
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;

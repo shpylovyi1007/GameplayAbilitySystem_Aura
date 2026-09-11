@@ -3,7 +3,10 @@
 
 #include "CoreMinimal.h"
 #include "AuraCharacterBase.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "Components/WidgetComponent.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraEnemy.generated.h"
 
 class USkeletalMesh;
@@ -25,13 +28,23 @@ public:
 	virtual int32 GetPlayerLevel() override;
 	/** end Combat Interface **/
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 	
 protected:
 	virtual void BeginPlay() override;
-	
 	virtual void InitAbilityActorInfo() override;
+	virtual void InitializeDefaultAttributes() const override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Class Defaults")
 	int32 Level = 1;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };
