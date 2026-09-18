@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName RightHandSocketName;
 	
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName TailSocketName;
+	
 	bool bDead = false;
 	
 	UPROPERTY()
@@ -95,6 +98,13 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UNiagaraSystem* BloodEffect;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundBase* DeathSound;
+	
+	/* Minions */
+	
+	int32 MinionCount = 0;
 	
 private:
 	
