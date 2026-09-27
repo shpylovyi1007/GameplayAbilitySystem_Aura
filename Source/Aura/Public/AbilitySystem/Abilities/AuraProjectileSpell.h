@@ -3,7 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "AuraDamageGameplayAbility.h"
-#include "AbilitySystem/Abilities/AuraGameplayAbility.h"
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
@@ -25,5 +24,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 	
-	
+	UPROPERTY(EditDefaultsOnly)
+	int32 NumProjectiles = 5;
 };
