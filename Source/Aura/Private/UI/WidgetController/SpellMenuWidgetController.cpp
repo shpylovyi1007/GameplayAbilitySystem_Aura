@@ -55,6 +55,13 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 
 void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityTag)
 {
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityType;
+		StopWaitingForEquipDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
+	
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 	const int32 SpellPoints = GetAuraPS()->GetSpellPoints();
 	FGameplayTag AbilityStatus;
@@ -92,6 +99,46 @@ void USpellMenuWidgetController::SpendPointButtonPressed()
 	{
 		GetAuraASC()->ServerSpendSpellPoint(SelectedAbility.Ability);
 	}
+}
+
+void USpellMenuWidgetController::GlobeDeselect()
+{
+	if (bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+		StopWaitingForEquipDelegate.Broadcast(SelectedAbilityType);
+        bWaitingForEquipSelection = false;
+	}
+	
+	SelectedAbility.Ability = FAuraGameplayTags::Get().Abilities_None;
+	SelectedAbility.Status = FAuraGameplayTags::Get().Abilities_Status_Locked;
+	
+	SpellGlobeSelectedDelegate.Broadcast(false, false, FString(), FString());
+}
+
+void USpellMenuWidgetController::EquipButtonPressed()
+{
+	const FGameplayTag AbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+	
+	WaitForEquipDelegate.Broadcast(AbilityType);
+	bWaitingForEquipSelection = true;
+	
+	const FGameplayTag SelectedStatus = GetAuraASC()->GetStatusFromAbilityTag(SelectedAbility.Ability);
+	if (SelectedStatus.MatchesTagExact(FAuraGameplayTags::Get().Abilities_Status_Equipped))
+	{
+		SelectedSlot = GetAuraASC()->GetInputTagFromAbilityTag(SelectedAbility.Ability);
+	}
+}
+
+void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTag, const FGameplayTag& AbilityType)
+{
+	if (!bWaitingForEquipSelection) return;
+	// Check Selected ability against the slot's ability type. Don't equip an offensive spell in a passive slot
+	
+	const FGameplayTag& SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+	if (!SelectedAbilityType.MatchesTagExact(AbilityType)) return;
+	
+	
 }
 
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoints,

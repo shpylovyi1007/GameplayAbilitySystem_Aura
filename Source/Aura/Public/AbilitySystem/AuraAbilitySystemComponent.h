@@ -33,6 +33,8 @@ public:
 	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	
+	FGameplayTag GetInputTagFromAbilityTag(const FGameplayTag& AbilityTag);
+	FGameplayTag GetStatusFromAbilityTag(const FGameplayTag& AbilityTag);
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
 	
 	void UpgradeAttribute(const FGameplayTag& AttributeTag); 
@@ -45,6 +47,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ServerSpendSpellPoint(const FGameplayTag& AbilityTag);
 	
+	UFUNCTION(Client, Reliable)
+	void ServerEquipAbility(const FGameplayTag& AbilityTag, const FGameplayTag& AbilitySlot);
+	
 	bool GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription, FString& NextLevelDescription);
 protected:
 	
@@ -55,6 +60,7 @@ protected:
 	
 	UFUNCTION(Client, Reliable)
 	void ClientUpdateAbilityStatus(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 AbilityLevel);
+	
 	
 	
 };
