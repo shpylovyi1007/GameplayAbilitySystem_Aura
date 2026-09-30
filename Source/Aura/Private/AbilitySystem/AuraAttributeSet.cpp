@@ -2,6 +2,7 @@
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "GameplayEffectComponents/TargetTagsGameplayEffectComponent.h"
 #include "GameplayTags/AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
 #include "Interaction/PlayerInterface.h"
@@ -229,10 +230,15 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	Effect->DurationPolicy = EGameplayEffectDurationType::HasDuration;
 	Effect->Period = DebuffFrequency;
 	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
-	
-	Effect->InheritableOwnedTagsContainer.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-	
+
+	FInheritedTagContainer GrantedTags;
+	GrantedTags.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
+	UTargetTagsGameplayEffectComponent& TargetTagsComponent = Effect->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
+	TargetTagsComponent.SetAndApplyTargetTagChanges(GrantedTags);
+
+	PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
+	PRAGMA_ENABLE_DEPRECATION_WARNINGS
 	Effect->StackLimitCount = 1;
 	
 	const int32 Index = Effect->Modifiers.Num();

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
+#include "AbilitySystem/Debuff/DebuffNiagaraComponent.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
@@ -36,8 +37,13 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TArray<FTaggedMontage> AttackMontages;
+	
+	virtual FOnASCRegistered& GetOnASCRegisteredDelegate() override;
+	virtual FOnDeath& GetOnDeathDelegate() override;
     /** end Combat Interface **/
 	
+	FOnASCRegistered OnAscRegistered;
+	FOnDeath OnDeath;
 	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
@@ -111,6 +117,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Class Defaults")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UDebuffNiagaraComponent> BurnDebuffComponent;
 	
 private:
 	
