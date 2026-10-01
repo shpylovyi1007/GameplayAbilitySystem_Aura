@@ -4,7 +4,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Actor/AuraProjectile.h"
-#include "GameplayTags/AuraGameplayTags.h"
 #include "Interaction/CombatInterface.h"
 
 
@@ -43,7 +42,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		
-		Projectile->DamageEffectParams= MakeDamageEffectParamsFromClassDefaults();
+		Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
 		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
