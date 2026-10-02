@@ -4,6 +4,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
 #include "GameplayTagContainer.h"
+#include "NiagaraSystem.h"
 #include "UI/Widget/DamageTextComponent.h"
 #include "AuraPlayerController.generated.h"
 
@@ -75,6 +76,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> ClickNiagaraSystem;
 	
 	void AutoRun();
 	
