@@ -40,6 +40,11 @@ void AAuraCharacterBase::Die(const FVector& DeathImpulse)
 	MulticastHandleDeath(DeathImpulse);
 }
 
+FOnDeathSignature& AAuraCharacterBase::GetOnDeathSignatureDelegate()
+{
+	return OnDeathDelegate;
+}
+
 TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation()
 {
 	return AttackMontages;
@@ -113,6 +118,7 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation(const FVector& Deat
 	bDead = true;
 	
 	OnDeath.Broadcast(this);
+	OnDeathDelegate.Broadcast(this);
 }
 
 void AAuraCharacterBase::BeginPlay()

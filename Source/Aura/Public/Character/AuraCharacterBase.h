@@ -28,6 +28,7 @@ public:
     virtual bool IsDead_Implementation() const override;
     virtual AActor* GetAvatar_Implementation() override;
     virtual void Die(const FVector& DeathImpulse) override;
+	virtual FOnDeathSignature& GetOnDeathSignatureDelegate() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& Tag) override;
@@ -43,6 +44,7 @@ public:
 	TArray<FTaggedMontage> AttackMontages;
 	
 	FOnASCRegistered OnAscRegistered;
+	FOnDeathSignature OnDeathDelegate;
 	FOnDeath OnDeath;
 	
 	UFUNCTION(NetMulticast, Reliable)

@@ -2,7 +2,6 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "GameplayTags/AuraGameplayTags.h"
 
 void UAuraDamageGameplayAbility::CauseDamage(AActor* TargetActor)
 {
@@ -31,6 +30,11 @@ FDamageEffectParams UAuraDamageGameplayAbility::MakeDamageEffectParamsFromClassD
 	Params.KnockbackForceMagnitude = KnockbackForceMagnitude;
 	Params.KnockbackChance = KnockbackChance;
 	return Params;
+}
+
+float UAuraDamageGameplayAbility::GetDamageAtLevel() const
+{
+	return Damage.GetValueAtLevel(GetAbilityLevel());
 }
 
 FTaggedMontage UAuraDamageGameplayAbility::GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const
