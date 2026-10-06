@@ -5,7 +5,6 @@
 #include "AbilitySystem/Data/AbilityInfo.h"
 #include "Aura/AuraLogChannels.h"
 #include "GameplayTags/AuraGameplayTags.h"
-#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Interaction/PlayerInterface.h"
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
@@ -23,8 +22,8 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 		{
 		    AbilitySpec.GetDynamicSpecSourceTags().AddTag(AuraAbility->StartupInputTag);
 			AbilitySpec.GetDynamicSpecSourceTags().AddTag(FAuraGameplayTags::Get().Abilities_Status_Equipped);
-			GiveAbility(AbilitySpec);
 		}
+		GiveAbility(AbilitySpec);
 	}
 	bStartupAbilitiesGiven = true;
 	AbilitiesGivenDelegate.Broadcast();
