@@ -60,7 +60,7 @@ TArray<USceneComponent*> APointCollection::GetGroundPoints(const FVector& Ground
 	
 	for (USceneComponent* Pt : ImmutablePts)
 	{
-		if (ArrayCopy.Num() > NumPoints) return ArrayCopy;
+		if (ArrayCopy.Num() >= NumPoints) return ArrayCopy;
 		
 		if (Pt != Pt_0)
 		{
@@ -69,8 +69,8 @@ TArray<USceneComponent*> APointCollection::GetGroundPoints(const FVector& Ground
 			Pt->SetWorldLocation(Pt_0->GetComponentLocation() + ToPoint);
 		}
 		
-		const FVector RaiserLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y,Pt->GetComponentLocation().Y + 500.f);
-		const FVector LoweredLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y,Pt->GetComponentLocation().Y - 500.f);
+		const FVector RaiserLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y,Pt->GetComponentLocation().Z + 500.f);
+		const FVector LoweredLocation = FVector(Pt->GetComponentLocation().X, Pt->GetComponentLocation().Y,Pt->GetComponentLocation().Z - 500.f);
 		
 		FHitResult HitResult;
 		TArray<AActor*> IgnoreActors;

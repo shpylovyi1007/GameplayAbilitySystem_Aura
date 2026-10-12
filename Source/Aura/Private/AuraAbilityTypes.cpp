@@ -48,15 +48,15 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* M
 		{
 			RepBits |= 1 << 9;
 		}
-		if (DebuffDamage > 0)
+		if (DebuffDamage > 0.f)
 		{
 			RepBits |= 1 << 10;
 		}
-		if (DebuffDuration > 0)
+		if (DebuffDuration > 0.f)
 		{
 			RepBits |= 1 << 11;
 		}
-		if (DebuffFrequency > 0)
+		if (DebuffFrequency > 0.f)
 		{
 			RepBits |= 1 << 12;
 		}
@@ -72,9 +72,26 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* M
 		{
 			RepBits |= 1 << 15;
 		}
+		if (bIsRadialDamage)
+		{
+			RepBits |= 1 << 16;
+			if (RadialDamageInnerRadius > 0.f)
+			{
+            	RepBits |= 1 << 17;
+			}
+            if (RadialDamageOuterRadius > 0.f)
+            {
+            	RepBits |= 1 << 18;
+            }
+            if (!RadialDamageOrigin.IsZero())
+            {
+            	RepBits |= 1 << 19;
+            }
+		}
+		
 	}
 	
-	Ar.SerializeBits(&RepBits, 16);
+	Ar.SerializeBits(&RepBits, 20);
 	if (RepBits & (1 << 0))
 	{
 		Ar << Instigator;
@@ -158,7 +175,23 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* M
 	{
 		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
 	}
-
+	if (RepBits & (1 << 16))
+	{
+		Ar << bIsRadialDamage;
+		
+		if (RepBits & (1 << 17))
+		{
+			Ar << RadialDamageInnerRadius;
+		}
+		if (RepBits & (1 << 18))
+		{
+			Ar << RadialDamageOuterRadius;
+		}
+		if (RepBits & (1 << 19))
+		{
+			RadialDamageOrigin.NetSerialize(Ar, Map, bOutSuccess);
+		}
+	}
 	if (Ar.IsLoading())
 	{
 		AddInstigator(Instigator.Get(), EffectCauser.Get()); // Just to initialize InstigatorAbilitySystemComponent
