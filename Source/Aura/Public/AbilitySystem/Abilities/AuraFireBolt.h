@@ -20,7 +20,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, bool bOverridePitch, float OverridePitch, AActor* HomingActor);
-
 	
 protected:
 	
