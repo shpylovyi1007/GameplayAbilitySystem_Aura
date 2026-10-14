@@ -19,7 +19,7 @@ FString UArcaneShards::GetDescription(int32 Level)
 			"<Small>Cooldown: </><Cooldown>%.1f</>\n\n"
 			
 			// Description
-			"<Default>Summon shards of arcane energy, causing </><Damage>%d</>"
+			"<Default>Summon a shard of arcane energy, causing </><Damage>%d</>"
 			"<Default> radial arcane damage at the shard origins</>"),
 			
 			// Values
@@ -53,7 +53,7 @@ FString UArcaneShards::GetNextLevelDescription(int32 Level)
 	
 	return FString::Printf(TEXT(
 		//Title
-		"<Title>ARCANE SHARDS</>\n\n"
+		"<Title>NEXT LEVEL:</>\n\n"
 			
 		// Details
 		"<Small>Level: </><Level>%d</>\n"
