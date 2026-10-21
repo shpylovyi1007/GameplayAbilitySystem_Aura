@@ -1,5 +1,4 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
-
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
@@ -18,9 +17,9 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	GetAuraPS()->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
 	GetAuraPS()->OnLevelChangedDelegate.AddLambda(
-	[this](int32 NewLevel)
+	[this](int32 NewLevel, bool bLevelUp)
 	{
-		OnPlayerLevelChangedDelegate.Broadcast(NewLevel);
+		OnPlayerLevelChangedDelegate.Broadcast(NewLevel, bLevelUp);
 	});
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
