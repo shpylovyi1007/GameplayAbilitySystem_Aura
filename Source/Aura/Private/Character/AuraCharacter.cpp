@@ -2,6 +2,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "Camera/CameraComponent.h"
 #include "Game/AuraGameModeBase.h"
 #include "Game/LoadScreenSaveGame.h"
@@ -65,6 +66,11 @@ void AAuraCharacter::LoadProgress()
 		}
 		else
 		{
+			if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
+			{
+				AuraASC->AddCharacterAbilitiesFromSaveData(SaveData);
+			}
+			
 			if (AAuraPlayerState* AuraPS = Cast<AAuraPlayerState>(GetPlayerState()))
 			{
 				AuraPS->SetLevel(SaveData->PlayerLevel);
@@ -219,6 +225,30 @@ void AAuraCharacter::SaveProgress_Implementation(const FName& CheckpointTag)
 		SaveData->Vigor = UAuraAttributeSet::GetVigorAttribute().GetNumericValue(GetAttributeSet());
 		
 		SaveData->bFirstTimeLoadIn = false;
+		
+		if (!HasAuthority()) return;
+		
+		UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+		FForEachAbility SavedAbilityDelegate;
+		SaveData->SavedAbilities.Empty();
+		SavedAbilityDelegate.BindLambda([this, AuraASC, SaveData](const FGameplayAbilitySpec& AbilitySpec)
+		{
+			const FGameplayTag AbilityTag = AuraASC->GetAbilityTagFromSpec(AbilitySpec);
+			UAbilityInfo* AbilityInfo = UAuraAbilitySystemLibrary::GetAbilityInfo(this);
+			FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+			
+			FSavedAbility SavedAbility;
+			SavedAbility.GameplayAbility = Info.Ability;
+			SavedAbility.AbilityLevel = AbilitySpec.Level;
+			SavedAbility.AbilitySlot = AuraASC->GetSlotFromAbilityTag(AbilityTag);
+			SavedAbility.AbilityStatus = AuraASC->GetStatusFromAbilityTag(AbilityTag);
+			SavedAbility.AbilityTag = AbilityTag;
+			SavedAbility.AbilityType = Info.AbilityType;
+			
+			SaveData->SavedAbilities.AddUnique(SavedAbility);
+		});
+		AuraASC->ForEachAbility(SavedAbilityDelegate);
+		
 		AuraGameMode->SaveInGameProgressData(SaveData);
 	}
 }
