@@ -25,23 +25,24 @@ public:
 	virtual void LoadActor_Implementation() override;
 	/* end Saved Interface */
 	
+	/* Highlight Interface */
+	virtual void SetMoveToLocation_Implementation(FVector& OutDestination) override;
+    virtual void HighlightActor_Implementation() override;
+    virtual void UnHighlightActor_Implementation() override;
+	/* end Highlight Interface */
+	
 	UPROPERTY(SaveGame, BlueprintReadWrite)
 	bool  bReached = false;
 	
 	UPROPERTY(EditAnywhere)
 	bool bBindOverlapCallback = true;
+	
 protected:
 	
 	virtual void BeginPlay() override;
 	
 	UFUNCTION()
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
-	/* Highlight Interface */
-	virtual void SetMoveToLocation_Implementation(FVector& OutDestination) override;
-	virtual void HighlightActor_Implementation() override;
-	virtual void UnHighlightActor_Implementation() override;
-	/* end Highlight Interface */
 	
 	UPROPERTY(EditDefaultsOnly)
 	int32 CustomDepthStencilOverride = CUSTOM_DEPTH_TAN;
@@ -58,8 +59,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> CheckpointMesh;
 	
-private:
-	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> CheckpointSphere;
+	
+	
 };
