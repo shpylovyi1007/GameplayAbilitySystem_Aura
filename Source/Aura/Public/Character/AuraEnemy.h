@@ -61,6 +61,9 @@ protected:
 	virtual void InitializeDefaultAttributes() const override;
 	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount) override;
 	
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnLoot();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Class Defaults")
 	int32 Level = 1;
 	
