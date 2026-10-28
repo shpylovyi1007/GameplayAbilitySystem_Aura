@@ -68,7 +68,7 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	bool bIsBeingShocked = false;
 	
-	
+	void SetCharacterClass(ECharacterClass InClass) { CharacterClass = InClass; }
 	
 	
 protected:
@@ -89,6 +89,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName TailSocketName;
 	
+	UPROPERTY(BlueprintReadOnly)
 	bool bDead = false;
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
